@@ -1,0 +1,33 @@
+#!/bin/bash
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+
+set -e
+
+
+# Proceed only if `$OPENSHIFT_DATA_DIR` does not contain a `pages` 
+# subdirectory.
+
+if [ ! -d "$OPENSHIFT_DATA_DIR/pages" ]; 
+then
+    # move directory content
+    mv $OPENSHIFT_REPO_DIR/php/data/* $OPENSHIFT_DATA_DIR/
+    
+    # remove directory
+    rm -rf $OPENSHIFT_REPO_DIR/php/data
+    
+    # create link
+    ln -sf $OPENSHIFT_DATA_DIR/ $OPENSHIFT_REPO_DIR/php/data
+    
+    echo
+    echo "done."
+    echo "=================================================="
+    echo "  Wiki-Admin login: admin"
+    echo "  Wiki-Admin password: OpenShiftAdmin"
+    echo "  Don't forget to change your wiki admin password!"
+    echo "=================================================="
+else
+    echo "This is not a fresh installation, skipping build"
+fi
