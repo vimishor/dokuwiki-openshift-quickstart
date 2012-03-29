@@ -17,7 +17,7 @@ Create a php-5.3 application (you can call your application whatever you want)
 Add this upstream dokuwiki repo
 
     cd dokuwiki
-    git remote add upstream -m master git@github.com:openshift/dokuwiki-quickstart.git
+    git remote add upstream -m master git://github.com/openshift/dokuwiki-quickstart.git
     git pull -s recursive -X theirs upstream master
     # note that the git pull above can be used later to pull updates to Dokuwiki
     
