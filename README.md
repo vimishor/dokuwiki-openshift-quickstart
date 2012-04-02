@@ -1,8 +1,8 @@
-Dokuwiki on OpenShift Express
-=============================
+Dokuwiki on OpenShift
+=====================
 
 This git repository helps you get up and running quickly w/ a Dokuwiki installation
-on OpenShift Express.
+on OpenShift.
 
 
 Running on OpenShift
