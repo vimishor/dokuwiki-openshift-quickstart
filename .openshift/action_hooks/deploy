@@ -14,12 +14,13 @@ if [ ! -d "$OPENSHIFT_DATA_DIR/pages" ];
 then
     # move directory content
     mv $OPENSHIFT_REPO_DIR/php/data/* $OPENSHIFT_DATA_DIR/
+    mv $OPENSHIFT_REPO_DIR/php/data/.??* $OPENSHIFT_DATA_DIR/
     
     # remove directory
     rm -rf $OPENSHIFT_REPO_DIR/php/data
     
-    # create link
-    ln -sf $OPENSHIFT_DATA_DIR/ $OPENSHIFT_REPO_DIR/php/data
+    # create link (optional)
+    #ln -sf $OPENSHIFT_DATA_DIR/ $OPENSHIFT_REPO_DIR/php/data
     
     echo
     echo "done."
@@ -30,4 +31,4 @@ then
     echo "=================================================="
 else
     echo "This is not a fresh installation, skipping build"
-fi
+fi 
