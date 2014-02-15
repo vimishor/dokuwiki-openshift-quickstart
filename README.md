@@ -10,9 +10,9 @@ Running on OpenShift
 
 Create an account at http://openshift.redhat.com/
 
-Create a php-5.3 application (you can call your application whatever you want)
+Create a php application (you can call your application whatever you want)
 
-    rhc app create -a dokuwiki -t php-5.3
+    rhc app create dokuwiki php-5.3
 
 Add this upstream dokuwiki repo
 
