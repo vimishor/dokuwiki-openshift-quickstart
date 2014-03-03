@@ -14,6 +14,14 @@ initial_password=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_pass
 data_dir=${OPENSHIFT_DATA_DIR}data
 
 if [ ! -d ${data_dir} ]; then
+  echo
+  echo "DokuWiki ${current_version} deployed succesfully."
+  echo
+  echo "Login:    admin"
+  echo "Password: ${initial_password}"
+  echo
+  echo "NOTE: Don't forget to change your wiki admin password."
+  echo
   mkdir -p ${OPENSHIFT_DATA_DIR}data
   mv ${install_dir}/data/* ${data_dir}/
   rm -rf ${install_dir}/data
@@ -33,14 +41,4 @@ fi
 ln -sf ${dest_dir} ${OPENSHIFT_REPO_DIR}php
 ln -sf ${data_dir} ${OPENSHIFT_REPO_DIR}php/data
 
-if [ ! -d ${data_dir}/pages ]; then
-  echo
-  echo "DokuWiki ${current_version} deployed succesfully."
-  echo
-  echo "Login:    admin"
-  echo "Password: ${initial_password}"
-  echo
-  echo "NOTE: Don't forget to change your wiki admin password."
-  echo "NOTE: This message will dissapear after you create first page."
-  echo
-fi
+

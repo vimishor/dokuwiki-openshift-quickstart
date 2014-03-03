@@ -25,10 +25,12 @@ Then push the repo upstream
 
     git push
 
-That's it, you can now checkout your application at (default admin account is admin/OpenShiftAdmin):
+That's it, you can now checkout your application at:
 
     http://dokuwiki-$yournamespace.rhcloud.com
 
+The default user is 'admin' and the password should be printed out to console
+after first `git push`. Please change the default password after first login.
 
 * * *
 
