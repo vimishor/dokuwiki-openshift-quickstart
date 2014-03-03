@@ -12,7 +12,7 @@ Create an account at http://openshift.redhat.com/
 
 Create a php application (you can call your application whatever you want)
 
-    rhc app create dokuwiki php-5.3
+    rhc app create dokuwiki php-5.4
 
 Add this upstream dokuwiki repo
 
@@ -20,7 +20,7 @@ Add this upstream dokuwiki repo
     git remote add upstream -m master git://github.com/openshift/dokuwiki-quickstart.git
     git pull -s recursive -X theirs upstream master
     # note that the git pull above can be used later to pull updates to Dokuwiki
-    
+
 Then push the repo upstream
 
     git push

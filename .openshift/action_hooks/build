@@ -1,5 +1,46 @@
-#!/bin/bash
+#!/bin/bash -e
 # This is a simple build script and will be executed on your CI system if 
 # available.  Otherwise it will execute while your application is stopped
 # before the deploy step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
+
+install_version="release_stable_2013-12-08"
+
+download_url="https://codeload.github.com/splitbrain/dokuwiki/legacy.tar.gz/${install_version}"
+
+# Download and install Dokuwiki
+
+install_dir=${OPENSHIFT_BUILD_DEPENDENCIES_DIR}${install_version}
+
+# Used in this script only
+current_version_dir=${OPENSHIFT_DATA_DIR}current
+
+#
+# If DokuWiki is already installed in the current gear, there
+# is nothing to build :-)
+#
+[ -d "${current_version_dir}" ] && exit 0
+
+mkdir -p $install_dir
+
+pushd ${install_dir} >/dev/null
+curl -s ${download_url} > dokuwiki-${install_version}.tar.gz
+tar --strip-components=1 -xzf dokuwiki-${install_version}.tar.gz
+rm -rf dokuwiki-${install_version}.tar.gz
+
+echo $install_version > ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version
+popd >/dev/null
+
+cp -f ${OPENSHIFT_REPO_DIR}.openshift/conf/* ${install_dir}/conf/
+
+# Set the initial password for DokuWiki
+#
+if [ ! -f ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password ]; then
+
+  auth_conf=${install_dir}/conf/users.auth.php
+  admin_pwd=$(openssl rand -base64 8)
+  admin_pwd_md5=$(echo -n $admin_pwd | md5sum | cut -d' ' -f1)
+
+  echo "admin:${admin_pwd_md5}:Administrator:example@example.com:admin,user" >> $auth_conf
+  echo $admin_pwd > ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password
+fi
