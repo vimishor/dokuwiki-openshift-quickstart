@@ -4,31 +4,43 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-set -e
 
+dest_dir=${OPENSHIFT_DATA_DIR}current
 
-# Proceed only if `$OPENSHIFT_DATA_DIR` does not contain a `pages` 
-# subdirectory.
+current_version=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version)
+install_dir=${OPENSHIFT_BUILD_DEPENDENCIES_DIR}${current_version}
+initial_password=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password)
 
-if [ ! -d "$OPENSHIFT_DATA_DIR/pages" ]; 
-then
-    # move directory content
-    mv $OPENSHIFT_REPO_DIR/php/data/* $OPENSHIFT_DATA_DIR/
-    mv $OPENSHIFT_REPO_DIR/php/data/.??* $OPENSHIFT_DATA_DIR/
-    
-    # remove directory
-    rm -rf $OPENSHIFT_REPO_DIR/php/data
-    
-    # create link (optional)
-    #ln -sf $OPENSHIFT_DATA_DIR/ $OPENSHIFT_REPO_DIR/php/data
-    
-    echo
-    echo "done."
-    echo "=================================================="
-    echo "  Wiki-Admin login: admin"
-    echo "  Wiki-Admin password: OpenShiftAdmin"
-    echo "  Don't forget to change your wiki admin password!"
-    echo "=================================================="
-else
-    echo "This is not a fresh installation, skipping build"
-fi 
+data_dir=${OPENSHIFT_DATA_DIR}data
+
+if [ ! -d ${data_dir} ]; then
+  mkdir -p ${OPENSHIFT_DATA_DIR}data
+  mv ${install_dir}/data/* ${data_dir}/
+  rm -rf ${install_dir}/data
+fi
+
+if [ ! -d "${dest_dir}" ]; then
+  mkdir -p $dest_dir
+  cp -rf ${install_dir}/* ${dest_dir}/
+fi
+
+# Replace the php/ directory with provided clean Dokuwiki installation
+#
+if [ -d ${OPENSHIFT_REPO_DIR}php ]; then
+  rm -rf ${OPENSHIFT_REPO_DIR}php
+fi
+
+ln -sf ${dest_dir} ${OPENSHIFT_REPO_DIR}php
+ln -sf ${data_dir} ${OPENSHIFT_REPO_DIR}php/data
+
+if [ ! -d ${data_dir}/pages ]; then
+  echo
+  echo "DokuWiki ${current_version} deployed succesfully."
+  echo
+  echo "Login:    admin"
+  echo "Password: ${initial_password}"
+  echo
+  echo "NOTE: Don't forget to change your wiki admin password."
+  echo "NOTE: This message will dissapear after you create first page."
+  echo
+fi
