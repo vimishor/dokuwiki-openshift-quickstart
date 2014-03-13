@@ -8,7 +8,7 @@ on OpenShift.
 Running on OpenShift
 ----------------------------
 
-Create an account at http://openshift.redhat.com/
+Create an account at https://www.openshift.com
 
 Create a php application (you can call your application whatever you want)
 
