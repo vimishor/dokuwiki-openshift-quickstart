@@ -4,24 +4,32 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
 dest_dir=${OPENSHIFT_DATA_DIR}current
 
 current_version=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version)
 install_dir=${OPENSHIFT_BUILD_DEPENDENCIES_DIR}${current_version}
-initial_password=$(cat ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password)
 
 data_dir=${OPENSHIFT_DATA_DIR}data
 
 if [ ! -d ${data_dir} ]; then
-  echo
-  echo "DokuWiki ${current_version} deployed succesfully."
-  echo
-  echo "Login:    admin"
-  echo "Password: ${initial_password}"
-  echo
-  echo "NOTE: Don't forget to change your wiki admin password."
-  echo
+
+  auth_conf=${install_dir}/conf/users.auth.php
+  admin_pwd=$(generate_password)
+  admin_pwd_md5=$(echo -n $admin_pwd | md5sum | cut -d' ' -f1)
+
+  echo "admin:${admin_pwd_md5}:Administrator:example@example.com:admin,user" >> $auth_conf
+
+  client_result ""
+  client_result "DokuWiki ${current_version} deployed succesfully."
+  client_result ""
+  client_result "      Login: admin"
+  client_result "   Password: $admin_pwd"
+  client_result ""
+  client_result "NOTE: Don't forget to change your wiki admin password."
+  client_result ""
+
   mkdir -p ${OPENSHIFT_DATA_DIR}data
   mv ${install_dir}/data/* ${data_dir}/
   rm -rf ${install_dir}/data

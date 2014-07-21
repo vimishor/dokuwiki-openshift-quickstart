@@ -32,15 +32,3 @@ echo $install_version > ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.current_version
 popd >/dev/null
 
 cp -f ${OPENSHIFT_REPO_DIR}.openshift/conf/* ${install_dir}/conf/
-
-# Set the initial password for DokuWiki
-#
-if [ ! -f ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password ]; then
-
-  auth_conf=${install_dir}/conf/users.auth.php
-  admin_pwd=$(openssl rand -base64 8)
-  admin_pwd_md5=$(echo -n $admin_pwd | md5sum | cut -d' ' -f1)
-
-  echo "admin:${admin_pwd_md5}:Administrator:example@example.com:admin,user" >> $auth_conf
-  echo $admin_pwd > ${OPENSHIFT_BUILD_DEPENDENCIES_DIR}.initial_dokuwiki_password
-fi
