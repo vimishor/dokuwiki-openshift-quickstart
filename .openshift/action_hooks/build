@@ -4,7 +4,7 @@
 # before the deploy step.  This script gets executed directly, so it
 # could be python, php, ruby, etc.
 
-install_version="release_stable_2015-08-10"
+install_version="release_stable_2015-08-10a"
 
 download_url="https://codeload.github.com/splitbrain/dokuwiki/tar.gz/${install_version}"
 
